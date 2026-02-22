@@ -28,8 +28,6 @@ function DatePicker({ id, name, labelText, register, setValue, className }) {
   const date = new Date(`${month}-${day}-${year}`);
   const daysInMonth = new Date(year, month, 0).getDate();
   const [view, setView] = useState("days");
-  const { ref: rhfRef, ...registerProps } = register("dateOfBirth");
-  const inputRef = useRef(null);
   return (
     <div className="field relative">
       <input
@@ -37,13 +35,9 @@ function DatePicker({ id, name, labelText, register, setValue, className }) {
         type="text"
         id={id}
         name={name}
-        autoComplete="bday-day"
+        autoComplete="off"
         placeholder="mm-dd-yyyy"
-        {...registerProps}
-        ref={(e) => {
-          rhfRef(e);
-          inputRef.current = e;
-        }}
+        {...register}
       />
       <label
         className="not-peer-placeholder-shown:text-sky-800/70 dark:not-peer-placeholder-shown:text-sky-600/70"
@@ -144,14 +138,13 @@ function DatePicker({ id, name, labelText, register, setValue, className }) {
               ))}
             </div>
             <button
-              className="btn-primary w-full"
+              className="btn-secondary w-full"
               onClick={(e) => {
                 e.preventDefault();
                 setValue(
                   "dateOfBirth",
                   `${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}-${year}`,
                 );
-                inputRef.current.blur();
               }}
             >
               Save
@@ -431,7 +424,7 @@ export default function Signup() {
                   id="birthDay"
                   name="birthDay"
                   labelText="Date of birth"
-                  register={register}
+                  register={{ ...register("dateOfBirth") }}
                   setValue={setValue}
                   className={
                     formState.errors.dateOfBirth

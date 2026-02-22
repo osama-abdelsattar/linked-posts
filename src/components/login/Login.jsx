@@ -141,15 +141,13 @@ export default function Login() {
                 )}
               </div>
               <div className="grow">
-                <div className="field floating-label">
-                  <PasswordInput
-                    id="password"
-                    labelText="Password"
-                    register={{ ...register("password") }}
-                    inputProps={{ autoComplete: "current-password webauthn" }}
-                    floatingLabel
-                  />
-                </div>
+                <PasswordInput
+                  id="password"
+                  labelText="Password"
+                  register={{ ...register("password") }}
+                  inputProps={{ autoComplete: "current-password webauthn" }}
+                  floatingLabel
+                />
                 {formState.errors.password && (
                   <div
                     className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"

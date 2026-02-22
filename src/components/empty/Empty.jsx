@@ -24,7 +24,7 @@ export default function Empty({
             {description}
           </p>
           {!noActionBtn && (
-            <Link className="btn-primary" to={destination}>
+            <Link className="btn-secondary" to={destination}>
               {actionText}
             </Link>
           )}

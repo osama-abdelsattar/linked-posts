@@ -14,7 +14,6 @@ export default function UserData({ children }) {
   const [userDataFetchEnabled, setUserDataFetchEnabled] = useState(
     Boolean(token),
   );
-  console.log(userDataFetchEnabled);
   const {
     data: userData,
     isLoading: userDataLoading,

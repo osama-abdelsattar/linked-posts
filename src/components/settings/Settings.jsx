@@ -44,8 +44,10 @@ function AccountSettings() {
               Coming soon...
             </Chip>
           </div>
-          <div className="field flex-row gap-4">
-            <input type="text" placeholder="" className="grow" disabled />
+          <div className="flex gap-2">
+            <div className="field grow">
+              <input type="text" placeholder="" className="grow" disabled />
+            </div>
             <Button
               isDisabled
               className="bg-sky-500 dark:bg-sky-400/50 text-sky-50 h-[stretch]"
@@ -191,6 +193,7 @@ function SecuritySettings() {
               register={{ ...register("password") }}
               labelText="Old password"
               floatingLabel
+              inputProps={{ autoComplete: "current-password webauthn" }}
             />
             {formState.errors.password && (
               <div
@@ -209,6 +212,7 @@ function SecuritySettings() {
               register={{ ...register("newPassword") }}
               labelText="New password"
               floatingLabel
+              inputProps={{ autoComplete: "new-password webauthn" }}
             />
             {formState.errors.newPassword && (
               <div
@@ -227,6 +231,7 @@ function SecuritySettings() {
               labelText="Confirm password"
               register={{ ...register("confirmPassword") }}
               floatingLabel
+              inputProps={{ autoComplete: "new-password webauthn" }}
             />
             {formState.errors.confirmPassword && (
               <div

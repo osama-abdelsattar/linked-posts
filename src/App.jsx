@@ -7,8 +7,6 @@ import UserData from "./context/UserData";
 import Authentication from "./context/Authentication";
 // HeroUI
 import { HeroUIProvider, ToastProvider } from "@heroui/react";
-// Style
-import "./App.css";
 // Components
 import Layout from "./layout/Layout";
 import Guard from "./components/Guard";

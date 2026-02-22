@@ -1,5 +1,5 @@
 // React
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useContext, useRef } from "react";
 // Context
 import { authContext } from "../../context/Authentication";
@@ -8,6 +8,7 @@ import { profileContext } from "../../context/UserData";
 import { useQueryClient } from "@tanstack/react-query";
 // HeroUI
 import {
+  addToast,
   Button,
   Dropdown,
   DropdownItem,
@@ -26,6 +27,7 @@ import { TbNotification } from "react-icons/tb";
 import { MdLogout } from "react-icons/md";
 // Components
 import UserAvatar from "../../components/avatar/Avatar";
+import { IoIosCheckmarkCircle } from "react-icons/io";
 
 export default function Header() {
   const { setToken } = useContext(authContext);
@@ -67,12 +69,13 @@ export default function Header() {
               </DropdownTrigger>
               <DropdownMenu aria-label="Static Actions">
                 <DropdownItem
+                  as={Link}
                   key="profile"
                   classNames={{
                     base: "data-[hover=true]:bg-sky-200 dark:data-[hover=true]:bg-slate-700",
                   }}
-                  href="/profile"
-                  textValue="Profile"
+                  aria-label="Profile"
+                  to="/profile"
                   showDivider
                 >
                   <User
@@ -89,13 +92,13 @@ export default function Header() {
                 </DropdownItem>
                 <DropdownSection>
                   <DropdownItem
+                    as={Link}
                     classNames={{
                       base: "data-[hover=true]:bg-sky-200 dark:data-[hover=true]:bg-slate-700",
                     }}
                     key="settings"
                     startContent={<PiGearBold />}
-                    href="/settings"
-                    textValue="Settings"
+                    to="/settings"
                   >
                     Settings
                   </DropdownItem>
@@ -104,11 +107,19 @@ export default function Header() {
                     className="text-danger"
                     startContent={<MdLogout />}
                     color="danger"
-                    textValue="Logout"
                     onClick={() => {
-                      setToken(null);
-                      localStorage.removeItem("token");
-                      navigate("/login");
+                      addToast({
+                        title: "Logged out, redirecting you to login page",
+                        color: "success",
+                        icon: <IoIosCheckmarkCircle />,
+                        classNames: { icon: "size-5" },
+                        timeout: 3000,
+                      });
+                      setTimeout(() => {
+                        setToken(null);
+                        localStorage.removeItem("token");
+                        navigate("/login");
+                      }, 3000);
                     }}
                   >
                     Log out
