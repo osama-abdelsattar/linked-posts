@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Bowlby+One+SC&family=DM+Serif+Text:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import "tailwindcss";
+@plugin './hero.js';
+@source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    @apply scroll-smooth scroll-pt-20;
+  }
+  body {
+    @apply bg-sky-50 dark:bg-slate-800 text-slate-700 dark:text-sky-100 transition-colors;
+  }
+  ::selection {
+    @apply bg-sky-700 text-sky-50;
+  }
+}

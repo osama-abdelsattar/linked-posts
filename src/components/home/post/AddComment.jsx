@@ -1,0 +1,92 @@
+// React
+import { Link } from "react-router-dom";
+import { useContext, useState, useRef } from "react";
+// Context
+import { authContext } from "../../../context/Authentication";
+import { profileContext } from "./../../../context/UserData";
+// API & Caching
+import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
+// HeroUI
+import { addToast, Button } from "@heroui/react";
+// Icons
+import { RiSendPlaneFill } from "react-icons/ri";
+import { FaRegCircleXmark } from "react-icons/fa6";
+import { IoIosCheckmarkCircle } from "react-icons/io";
+// Components
+import UserAvatar from "../../avatar/Avatar";
+
+export default function AddComment({ postId, refetch, className }) {
+  const { userData } = useContext(profileContext);
+  const { token } = useContext(authContext);
+  const [comment, setComment] = useState("");
+  const commentInputRef = useRef(null);
+  const { isPending, mutate } = useMutation({
+    mutationFn: () =>
+      axios.post(
+        `https://route-posts.routemisr.com/posts/${postId}/comments`,
+        {
+          content: comment,
+        },
+        { headers: { token: token } },
+      ),
+    onSuccess: () => {
+      addToast({
+        title: "Comment posted.",
+        color: "success",
+        icon: <IoIosCheckmarkCircle />,
+        classNames: { icon: "size-5" },
+        timeout: 3000,
+      });
+      commentInputRef.current.value = "";
+      setComment("");
+      refetch();
+    },
+    onError: ({ response }) => {
+      const errorMsg = response.data.message;
+      const cleanErrorMsg = errorMsg
+        .slice(errorMsg.lastIndexOf('"') + 1, errorMsg.length)
+        .trim();
+      addToast({
+        title: `Comment ${cleanErrorMsg}.`,
+        color: "danger",
+        icon: <FaRegCircleXmark />,
+        classNames: { icon: "size-5" },
+        timeout: 3000,
+      });
+    },
+  });
+  return (
+    <div className={`px-4 ${className || ""}`}>
+      <div className="flex items-center gap-3">
+        <Link className="shrink-0" to="/profile">
+          <UserAvatar src={userData?.data.data.user.photo} />
+        </Link>
+        <div className="field w-full">
+          <input
+            ref={commentInputRef}
+            autoComplete="off"
+            type="text"
+            name="comment"
+            onChange={(e) => {
+              setComment(e.target.value);
+            }}
+            className="grow border-2 border-slate-300 focus:border-slate-400 focus:ring-4 focus:ring-slate-600/40 resize-none p-4 text-slate-600 placeholder:text-slate-400 dark:border-slate-600 dark:focus:border-slate-500/80 dark:focus:ring-slate-600/70 dark:text-slate-300 dark:placeholder:text-slate-500 transition-all rounded-full outline-0 py-2 px-4"
+            placeholder="Write a comment"
+          />
+        </div>
+        <Button
+          className="bg-sky-500 dark:bg-sky-400/50 text-sky-50 px-4!"
+          radius="full"
+          isLoading={isPending}
+          startContent={
+            !isPending && <RiSendPlaneFill className="shrink-0 size-4" />
+          }
+          onPress={mutate}
+        >
+          Comment
+        </Button>
+      </div>
+    </div>
+  );
+}
