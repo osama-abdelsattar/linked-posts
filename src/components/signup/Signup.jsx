@@ -1,22 +1,20 @@
 // React
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // React Hook Form
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 // API & Caching
-import axios from "axios";
+import api from "../../api";
 import { useMutation } from "@tanstack/react-query";
 // Components
 import LoginHero from "../login-hero/LoginHero";
 // HeroUI
-import { addToast, Button } from "@heroui/react";
+import { Button } from "@heroui/react";
 // Style
-import "./Signup.css";
-// Icons
-import { IoIosCheckmarkCircle } from "react-icons/io";
-import { FaRegCircleXmark } from "react-icons/fa6";
+import { FaAngleRight, FaArrowLeft, FaArrowRight } from "react-icons/fa6";
+import { showSuccessToast, showErrorToast } from "../../utils/toast";
 // Components
 import PasswordInput from "../password-input/PasswordInput";
 // Functional Components
@@ -68,7 +66,7 @@ function DatePicker({ id, name, labelText, register, setValue, className }) {
             }}
             className="cursor-pointer hover:bg-slate-300/35 dark:hover:bg-slate-700/50 transition-colors p-2 rounded-lg"
           >
-            <i className="fas fa-arrow-left"></i>
+            <FaArrowLeft />
           </button>
           {view === "days" ? (
             <button
@@ -119,7 +117,7 @@ function DatePicker({ id, name, labelText, register, setValue, className }) {
             }}
             className="cursor-pointer hover:bg-slate-300/35 dark:hover:bg-slate-700/50 transition-colors p-2 rounded-lg"
           >
-            <i className="fas fa-arrow-right"></i>
+            <FaArrowRight />
           </button>
         </div>
         {view === "days" ? (
@@ -128,7 +126,9 @@ function DatePicker({ id, name, labelText, register, setValue, className }) {
               {Array.from({ length: daysInMonth }).map((_, i) => (
                 <div
                   key={`day-${i + 1}`}
-                  className={`day-btn ${i + 1 === date.getDate() ? "active" : ""}`}
+                  className={`day-btn ${
+                    i + 1 === date.getDate() ? "active" : ""
+                  }`}
                   onClick={() => {
                     setDay(i + 1);
                   }}
@@ -143,7 +143,9 @@ function DatePicker({ id, name, labelText, register, setValue, className }) {
                 e.preventDefault();
                 setValue(
                   "dateOfBirth",
-                  `${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}-${year}`,
+                  `${month.toString().padStart(2, "0")}-${day
+                    .toString()
+                    .padStart(2, "0")}-${year}`,
                 );
               }}
             >
@@ -190,50 +192,51 @@ function DatePicker({ id, name, labelText, register, setValue, className }) {
   );
 }
 
+const signupSchema = z
+  .object({
+    name: z
+      .string()
+      .min(3, "Name must be at least 3 letters.")
+      .max(32, "Name must be at most 32 letters."),
+    username: z
+      .string()
+      .regex(
+        /^(|[a-z0-9_-]{3,24})$/,
+        "Username must be at least 3 characters, at most 24 characters, and contain only letters, digits, underscore, or dash (hyphen).",
+      ),
+    email: z.email("Please enter a valid email address"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters.")
+      .regex(
+        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+        "Weak Password",
+      ),
+    rePassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters.")
+      .regex(
+        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+        "Weak Password.",
+      ),
+    dateOfBirth: z
+      .string()
+      .regex(
+        /^(0[1-9]||1[0-2])-(0[1-9]||1[0-9]||2[0-9]||3[01])-(19|20)([\d]{2})$/,
+        "Please enter a date with this format: mm-dd-yyyy.",
+      )
+      .refine((value) => {
+        return new Date().getFullYear() - new Date(value).getFullYear() >= 13;
+      }, "Your age should be 13+ to use the platform."),
+    gender: z.enum(["male", "female"], "You must select a gender."),
+  })
+  .refine((values) => values.password === values.rePassword, {
+    error: "Passwords should be the same.",
+    path: ["rePassword"],
+  });
+
 export default function Signup() {
   const navigate = useNavigate();
-  const schema = z
-    .object({
-      name: z
-        .string()
-        .min(3, "Name must be at least 3 letters.")
-        .max(32, "Name must be at most 32 letters."),
-      username: z
-        .string()
-        .regex(
-          /^(|[a-z0-9_-]{3,24})$/,
-          "Username must be at least 3 characters, at most 24 characters, and contain only letters, digits, underscore, or dash (hyphen).",
-        ),
-      email: z.email("Please enter a valid email address"),
-      password: z
-        .string()
-        .min(8, "Password must be at least 8 characters.")
-        .regex(
-          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-          "Weak Password",
-        ),
-      rePassword: z
-        .string()
-        .min(8, "Password must be at least 8 characters.")
-        .regex(
-          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-          "Weak Password.",
-        ),
-      dateOfBirth: z
-        .string()
-        .regex(
-          /^(0[1-9]||1[0-2])-(0[1-9]||1[0-9]||2[0-9]||3[01])-(19|20)([\d]{2})$/,
-          "Please enter a date with this format: mm-dd-yyyy.",
-        )
-        .refine((value) => {
-          return new Date().getFullYear() - new Date(value).getFullYear() >= 13;
-        }, "Your age should be 13+ to use the platform."),
-      gender: z.enum(["male", "female"], "You must select a gender."),
-    })
-    .refine((values) => values.password === values.rePassword, {
-      error: "Passwords should be the same.",
-      path: ["rePassword"],
-    });
   const { handleSubmit, register, formState, setValue } = useForm({
     defaultValues: {
       name: "",
@@ -244,33 +247,28 @@ export default function Signup() {
       dateOfBirth: "",
       gender: "",
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(signupSchema),
   });
   const { isPending, mutate: signUp } = useMutation({
-    mutationFn: (values) =>
-      axios.post("https://route-posts.routemisr.com/users/signup", values),
+    mutationFn: (values) => api.post("/users/signup", values),
     onSuccess: ({ data }) => {
       setTimeout(() => {
         navigate("/login");
       }, 3000);
-      addToast({
-        title: `${data.message[0].toUpperCase().concat(data.message.slice(1, data.message.length))}, redirecting you to login page`,
-        color: "success",
-        icon: <IoIosCheckmarkCircle />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
+      showSuccessToast(
+        `${data.message[0]
+          .toUpperCase()
+          .concat(
+            data.message.slice(1, data.message.length),
+          )}, redirecting you to login page`,
+      );
     },
     onError: ({ response }) => {
-      addToast({
-        title: response.data.message[0]
+      showErrorToast(
+        response.data.message[0]
           .toUpperCase()
           .concat(response.data.message.slice(1, response.data.message.length)),
-        color: "danger",
-        icon: <FaRegCircleXmark />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
+      );
     },
   });
   return (
@@ -289,7 +287,7 @@ export default function Signup() {
                   className="block w-full h-full text-lg font-semibold text-sky-600/50 dark:text-sky-500/40 hover:text-sky-600 dark:hover:text-sky-600 transition-colors"
                 >
                   Log in
-                  <i className="fas fa-angle-right group-hover:translate-x-0.5 transition-transform"></i>
+                  <FaAngleRight className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
             </div>

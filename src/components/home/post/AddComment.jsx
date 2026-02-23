@@ -5,16 +5,17 @@ import { useContext, useState, useRef } from "react";
 import { authContext } from "../../../context/Authentication";
 import { profileContext } from "./../../../context/UserData";
 // API & Caching
-import axios from "axios";
+import api from "../../../api";
 import { useMutation } from "@tanstack/react-query";
 // HeroUI
-import { addToast, Button } from "@heroui/react";
+import { Button } from "@heroui/react";
 // Icons
 import { RiSendPlaneFill } from "react-icons/ri";
 import { FaRegCircleXmark } from "react-icons/fa6";
-import { IoIosCheckmarkCircle } from "react-icons/io";
 // Components
 import UserAvatar from "../../avatar/Avatar";
+import cleanErrorMsg from "../../../utils/cleanErrorMsg";
+import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 
 export default function AddComment({ postId, refetch, className }) {
   const { userData } = useContext(profileContext);
@@ -23,44 +24,28 @@ export default function AddComment({ postId, refetch, className }) {
   const commentInputRef = useRef(null);
   const { isPending, mutate } = useMutation({
     mutationFn: () =>
-      axios.post(
-        `https://route-posts.routemisr.com/posts/${postId}/comments`,
+      api.post(
+        `/posts/${postId}/comments`,
         {
           content: comment,
         },
         { headers: { token: token } },
       ),
     onSuccess: () => {
-      addToast({
-        title: "Comment posted.",
-        color: "success",
-        icon: <IoIosCheckmarkCircle />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
+      showSuccessToast("Comment posted.");
       commentInputRef.current.value = "";
       setComment("");
       refetch();
     },
     onError: ({ response }) => {
-      const errorMsg = response.data.message;
-      const cleanErrorMsg = errorMsg
-        .slice(errorMsg.lastIndexOf('"') + 1, errorMsg.length)
-        .trim();
-      addToast({
-        title: `Comment ${cleanErrorMsg}.`,
-        color: "danger",
-        icon: <FaRegCircleXmark />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
+      showErrorToast(`Comment ${cleanErrorMsg(response?.data?.message)}.`);
     },
   });
   return (
     <div className={`px-4 ${className || ""}`}>
       <div className="flex items-center gap-3">
         <Link className="hidden md:block shrink-0" to="/profile">
-          <UserAvatar src={userData?.data.data.user.photo} />
+          <UserAvatar src={userData?.user.photo} />
         </Link>
         <div className="field w-full">
           <input

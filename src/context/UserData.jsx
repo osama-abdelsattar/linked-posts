@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from "react";
 // Context
 import { authContext } from "./Authentication";
 // API & Caching
-import axios from "axios";
+import api from "../api";
 import { useQuery } from "@tanstack/react-query";
 // Components
 import ReloadSpinner from "../components/reload-spinner/ReloadSpinner";
@@ -17,25 +17,22 @@ export default function UserData({ children }) {
   const {
     data: userData,
     isLoading: userDataLoading,
-    isFetching: userDataFetching,
     refetch,
   } = useQuery({
     queryKey: ["MyData"],
     queryFn: () =>
-      axios.get("https://route-posts.routemisr.com/users/profile-data", {
+      api.get("/users/profile-data", {
         headers: {
           token: token,
         },
       }),
-    refetchOnWindowFocus: false,
-    refetchOnMount: true,
+    select: (res) => res.data.data,
     enabled: userDataFetchEnabled,
   });
   return (
     <profileContext.Provider
       value={{ userData, userDataLoading, refetch, setUserDataFetchEnabled }}
     >
-      {userDataFetching && <ReloadSpinner />}
       {children}
     </profileContext.Provider>
   );

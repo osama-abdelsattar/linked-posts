@@ -8,7 +8,6 @@ import { profileContext } from "../../context/UserData";
 import { useQueryClient } from "@tanstack/react-query";
 // HeroUI
 import {
-  addToast,
   Button,
   Dropdown,
   DropdownItem,
@@ -24,7 +23,6 @@ import {
   NavbarMenuToggle,
 } from "@heroui/react";
 // Style
-import "./Header.css";
 // Icons
 import { PiHouseBold, PiGearBold } from "react-icons/pi";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -32,7 +30,7 @@ import { TbNotification } from "react-icons/tb";
 import { MdLogout } from "react-icons/md";
 // Components
 import UserAvatar from "../../components/avatar/Avatar";
-import { IoIosCheckmarkCircle } from "react-icons/io";
+import { showSuccessToast } from "../../utils/toast";
 
 export default function Header() {
   const { setToken } = useContext(authContext);
@@ -142,7 +140,7 @@ export default function Header() {
             <UserAvatar
               as="button"
               className="cursor-pointer"
-              src={userData?.data.data.user.photo}
+              src={userData?.user.photo}
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
@@ -161,18 +159,12 @@ export default function Header() {
                 aria-label="Profile"
               >
                 <div className="flex items-center gap-3">
-                  <UserAvatar
-                    size="sm"
-                    isBordered
-                    src={userData?.data.data.user.photo}
-                  />
+                  <UserAvatar size="sm" isBordered src={userData?.user.photo} />
                   <div>
                     <p className="text-slate-500 dark:text-slate-400">
                       Signed in as
                     </p>
-                    <p className="font-semibold">
-                      {userData?.data.data.user.name}
-                    </p>
+                    <p className="font-semibold">{userData?.user.name}</p>
                   </div>
                 </div>
               </DropdownItem>
@@ -200,13 +192,7 @@ export default function Header() {
               className="text-danger"
               startContent={<MdLogout />}
               onPress={() => {
-                addToast({
-                  title: "Logged out, redirecting to login page.",
-                  color: "success",
-                  icon: <IoIosCheckmarkCircle />,
-                  classNames: { icon: "size-5" },
-                  timeout: 3000,
-                });
+                showSuccessToast("Logged out, redirecting to login page.");
                 setToken(null);
                 localStorage.removeItem("token");
               }}
@@ -248,13 +234,7 @@ export default function Header() {
             color="danger"
             variant="ghost"
             onPress={() => {
-              addToast({
-                title: "Logged out, redirecting to login page.",
-                color: "success",
-                icon: <IoIosCheckmarkCircle />,
-                classNames: { icon: "size-5" },
-                timeout: 3000,
-              });
+              showSuccessToast("Logged out, redirecting to login page.");
               setToken(null);
               localStorage.removeItem("token");
             }}

@@ -1,46 +1,24 @@
 // React
 import { Link } from "react-router-dom";
-import { useContext, useRef, useState } from "react";
-// Context
-import { authContext } from "../../../context/Authentication";
+import { useContext } from "react";
 import { profileContext } from "../../../context/UserData";
 // API & Caching
-import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
-// HeroUI
 import {
-  addToast,
   Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Image,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
   useDisclosure,
 } from "@heroui/react";
-// Icons
-import {
-  FaBookmark,
-  FaPencil,
-  FaRegCircleXmark,
-  FaTrash,
-  FaUserPlus,
-  FaXmark,
-} from "react-icons/fa6";
+import { FaBookmark, FaPencil, FaTrash, FaUserPlus } from "react-icons/fa6";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { IoIosCheckmarkCircle } from "react-icons/io";
-import { MdPhotoCamera } from "react-icons/md";
-// Components
+import DeleteModal from "./modals/DeleteModal";
+import UpdatePostModal from "./modals/UpdatePostModal";
 import UserAvatar from "../../avatar/Avatar";
 
 export default function PostHeader({ post, refetch }) {
   const { userData } = useContext(profileContext);
-  const { token } = useContext(authContext);
   const {
     isOpen: isDeleteModalOpen,
     onOpen: onDeleteModalOpen,
@@ -53,78 +31,6 @@ export default function PostHeader({ post, refetch }) {
     onOpenChange: onUpdateModalOpenChange,
     onClose: onUpdateModalClose,
   } = useDisclosure();
-  const [postBody, setPostBody] = useState(post.body);
-  const [postImage, setPostImage] = useState(post.image);
-  const postImageRef = useRef(null);
-  const { isPending: isDeletionPending, mutate: deletePost } = useMutation({
-    mutationFn: () =>
-      axios.delete(`https://route-posts.routemisr.com/posts/${post._id}`, {
-        headers: { token: token },
-      }),
-    onSuccess: () => {
-      onDeleteModalClose();
-      addToast({
-        title: "Post deleted.",
-        color: "success",
-        icon: <IoIosCheckmarkCircle />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
-      refetch();
-    },
-    onError: ({ response }) => {
-      const errorMsg = response.data.message;
-      const cleanErrorMsg = errorMsg
-        .slice(errorMsg.lastIndexOf('"') + 1, errorMsg.length)
-        .trim();
-      addToast({
-        title: `Post ${cleanErrorMsg}.`,
-        color: "danger",
-        icon: <FaRegCircleXmark />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
-    },
-  });
-  const { isPending: isUpdatePending, mutate: updatePost } = useMutation({
-    mutationFn: () => {
-      const postData = new FormData();
-      postData.append("body", postBody);
-      if (postImageRef.current.files[0])
-        postData.append("image", postImageRef.current.files[0]);
-      return axios.put(
-        `https://route-posts.routemisr.com/posts/${post._id}`,
-        postData,
-        {
-          headers: { token: token },
-        },
-      );
-    },
-    onSuccess: () => {
-      onUpdateModalClose();
-      addToast({
-        title: "Post updated.",
-        color: "success",
-        icon: <IoIosCheckmarkCircle />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
-      refetch();
-    },
-    onError: ({ response }) => {
-      const errorMsg = response.data.message;
-      const cleanErrorMsg = errorMsg
-        .slice(errorMsg.lastIndexOf('"') + 1, errorMsg.length)
-        .trim();
-      addToast({
-        title: `Post ${cleanErrorMsg}.`,
-        color: "danger",
-        icon: <FaRegCircleXmark />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
-    },
-  });
   return (
     <>
       <div className="flex items-center justify-between w-full">
@@ -177,7 +83,7 @@ export default function PostHeader({ post, refetch }) {
             >
               Save
             </DropdownItem>
-            {post.user._id === userData?.data.data.user._id ? (
+            {post.user._id === userData?.user._id ? (
               [
                 <DropdownItem
                   key="Edit Post"
@@ -217,131 +123,22 @@ export default function PostHeader({ post, refetch }) {
           </DropdownMenu>
         </Dropdown>
         {/* Delete Modal */}
-        <Modal
+        <DeleteModal
+          endpoint={`/posts/${post._id}`}
+          itemType="Post"
           isOpen={isDeleteModalOpen}
           onOpenChange={onDeleteModalOpenChange}
-        >
-          <ModalContent>
-            {(onDeleteModalClose) => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">
-                  Delete post
-                </ModalHeader>
-                <ModalBody>
-                  <p>
-                    <span className="font-medium">Are you sure?</span>
-                    <br />
-                    Post will be deleted permanently,{" "}
-                    <span className="text-rose-400">this can't be undone.</span>
-                  </p>
-                </ModalBody>
-                <ModalFooter>
-                  <Button
-                    isDisabled={isDeletionPending}
-                    color="default"
-                    variant="light"
-                    onPress={onDeleteModalClose}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    color="danger"
-                    onPress={deletePost}
-                    isLoading={isDeletionPending}
-                  >
-                    Delete
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
+          onClose={onDeleteModalClose}
+          refetch={refetch}
+        />
         {/* Update Modal */}
-        <Modal
+        <UpdatePostModal
+          post={post}
           isOpen={isUpdateModalOpen}
           onOpenChange={onUpdateModalOpenChange}
-        >
-          <ModalContent>
-            {(onUpdateModalClose) => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">
-                  Edit post
-                </ModalHeader>
-                <ModalBody>
-                  <textarea
-                    name="post"
-                    placeholder="What's on your mind?"
-                    className="textarea-input neutral"
-                    value={postBody}
-                    onChange={(e) => {
-                      setPostBody(e.target.value);
-                    }}
-                    rows="3"
-                  ></textarea>
-                  <input
-                    ref={postImageRef}
-                    type="file"
-                    className="hidden"
-                    id="photo-input"
-                    tabIndex="-1"
-                    onChange={(e) => {
-                      setPostImage(URL.createObjectURL(e.target.files[0]));
-                    }}
-                  />
-                  <Button
-                    as="label"
-                    htmlFor="photo-input"
-                    variant="ghost"
-                    color="default"
-                    className="flex items-center"
-                    isDisabled={isUpdatePending}
-                  >
-                    <MdPhotoCamera className="text-xl me-2" />
-                    {postImage ? "Change" : "Add"} Photo
-                  </Button>
-                  <div className={`relative ${postImage ? "" : "hidden"}`}>
-                    <Image
-                      width={"100%"}
-                      classNames={{ wrapper: "dark:bg-slate-600/60" }}
-                      className="max-h-[20rem] object-cover"
-                      src={postImage}
-                    />
-                    {!post.image && (
-                      <Button
-                        onPress={() => {
-                          postImageRef.current.value = "";
-                          setPostImage(null);
-                        }}
-                        variant="flat"
-                        color="danger"
-                        className="absolute top-2 right-2 z-40 p-3 rounded-full min-w-fit"
-                      >
-                        <FaXmark />
-                      </Button>
-                    )}
-                  </div>
-                </ModalBody>
-                <ModalFooter>
-                  <Button
-                    isDisabled={isUpdatePending}
-                    color="default"
-                    variant="light"
-                    onPress={onUpdateModalClose}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    color="primary"
-                    onPress={updatePost}
-                    isLoading={isUpdatePending}
-                  >
-                    Update
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
+          onClose={onUpdateModalClose}
+          refetch={refetch}
+        />
       </div>
     </>
   );

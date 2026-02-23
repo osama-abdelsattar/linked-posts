@@ -7,19 +7,20 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 // API & Caching
-import axios from "axios";
+import api from "../../api";
 import { useForm } from "react-hook-form";
 // HeroUI
-import { addToast, Button, Chip, Select, SelectItem } from "@heroui/react";
+import { Button, Chip, Select, SelectItem } from "@heroui/react";
 // Icons
 import { PiWrenchFill } from "react-icons/pi";
-import { IoIosCheckmarkCircle } from "react-icons/io";
-import { FaUserCircle } from "react-icons/fa";
-import { FaRegCircleXmark } from "react-icons/fa6";
 import { GoPasskeyFill } from "react-icons/go";
+import { showSuccessToast, showErrorToast } from "../../utils/toast";
+import { FaUserCircle } from "react-icons/fa";
 // Components
 import PasswordInput from "../password-input/PasswordInput";
 import ThemeSwitch from "../themeSwitch/ThemeSwitch";
+// Motion
+import { motion } from "framer-motion";
 // Functional Components
 function AppearanceSettings() {
   const themes = [
@@ -103,48 +104,49 @@ function AccountSettings() {
     </div>
   );
 }
+const securitySchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters.")
+      .regex(
+        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+        "Weak Password",
+      ),
+    newPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters.")
+      .regex(
+        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+        "Weak Password",
+      ),
+    confirmPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters.")
+      .regex(
+        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+        "Weak Password",
+      ),
+  })
+  .refine((values) => values.newPassword === values.confirmPassword, {
+    error: "Passwords should be the same.",
+    path: ["confirmPassword"],
+  });
+
 function SecuritySettings() {
   const { token, setToken } = useContext(authContext);
-  const schema = z
-    .object({
-      password: z
-        .string()
-        .min(8, "Password must be at least 8 characters.")
-        .regex(
-          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-          "Weak Password",
-        ),
-      newPassword: z
-        .string()
-        .min(8, "Password must be at least 8 characters.")
-        .regex(
-          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-          "Weak Password",
-        ),
-      confirmPassword: z
-        .string()
-        .min(8, "Password must be at least 8 characters.")
-        .regex(
-          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-          "Weak Password",
-        ),
-    })
-    .refine((values) => values.newPassword === values.confirmPassword, {
-      error: "Passwords should be the same.",
-      path: ["confirmPassword"],
-    });
   const { formState, handleSubmit, register, reset } = useForm({
     defaultValues: {
       password: "",
       newPassword: "",
       confirmPassword: "",
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(securitySchema),
   });
   const { isPending, mutate: changePassword } = useMutation({
     mutationFn: (values) =>
-      axios.patch(
-        "https://route-posts.routemisr.com/users/change-password",
+      api.patch(
+        "/users/change-password",
         {
           password: values.password,
           newPassword: values.newPassword,
@@ -152,28 +154,17 @@ function SecuritySettings() {
         { headers: { token: token } },
       ),
     onSuccess: ({ data }) => {
-      addToast({
-        title: data.message[0]
+      showSuccessToast(
+        data.message[0]
           .toUpperCase()
           .concat(data.message.slice(1, data.message.length), "."),
-        color: "success",
-        icon: <IoIosCheckmarkCircle />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
+      );
       reset();
       setToken(data.data.token);
       localStorage.setItem("token", data.data.token);
     },
-    onError: ({ response }) => {
-      console.log(response);
-      addToast({
-        title: "Old password is incorrect.",
-        color: "danger",
-        icon: <FaRegCircleXmark />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
+    onError: () => {
+      showErrorToast("Old password is incorrect.");
     },
   });
   return (
@@ -262,20 +253,26 @@ function SecuritySettings() {
 
 export default function Settings() {
   return (
-    <div className="flex flex-col gap-8 p-4 md:p-8 sm:rounded-2xl bg-white dark:bg-slate-800 transition-colors">
-      <div className="">
-        <h1 className="text-2xl sm:text-4xl md:text-5xl font-semibold sm:mb-1 md:mb-2">
-          Settings
-        </h1>
-        <p className="md:text-lg text-slate-500">
-          Change password, toggle dark theme, and more.
-        </p>
-      </div>
-      <div className="grid lg:grid-cols-2 gap-x-12 gap-y-6">
-        <AppearanceSettings />
-        <AccountSettings />
-        <SecuritySettings />
-      </div>
-    </div>
+    <motion.div
+      className="flex flex-col gap-8 p-4 md:p-8 sm:rounded-2xl bg-white dark:bg-slate-800 transition-colors"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      children={[
+        <div key="settingsHeading">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-semibold sm:mb-1 md:mb-2">
+            Settings
+          </h1>
+          <p className="md:text-lg text-slate-500">
+            Change password, toggle dark theme, and more.
+          </p>
+        </div>,
+        <div key="settingsGrid" className="grid lg:grid-cols-2 gap-x-12 gap-y-6">
+          <AppearanceSettings />
+          <AccountSettings />
+          <SecuritySettings />
+        </div>
+      ]}
+    />
   );
 }

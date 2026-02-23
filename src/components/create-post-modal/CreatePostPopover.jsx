@@ -1,13 +1,11 @@
-// React
-import { useContext, useRef, useState } from "react";
+import { useContext, useRef, useState, useEffect } from "react";
 // Context
 import { authContext } from "../../context/Authentication";
 // API & Caching
-import axios from "axios";
+import api from "../../api";
 import { useMutation } from "@tanstack/react-query";
 // HeroUI
 import {
-  addToast,
   Button,
   Image,
   Modal,
@@ -21,7 +19,8 @@ import {
 import { FaRegCircleXmark, FaXmark } from "react-icons/fa6";
 import { MdPhotoCamera } from "react-icons/md";
 import { RiSendPlaneFill } from "react-icons/ri";
-import { IoIosCheckmarkCircle } from "react-icons/io";
+import cleanErrorMsg from "../../utils/cleanErrorMsg";
+import { showSuccessToast, showErrorToast } from "../../utils/toast";
 
 export default function CreatePostPopover({
   refetch,
@@ -33,36 +32,29 @@ export default function CreatePostPopover({
   const [postBody, setPostBody] = useState("");
   const postImageRef = useRef();
   const [postImage, setPostImage] = useState(null);
+
+  // Cleanup object URL to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (postImage) {
+        URL.revokeObjectURL(postImage);
+      }
+    };
+  }, [postImage]);
   const { isPending, mutate } = useMutation({
     mutationFn: (postData) =>
-      axios.post("https://route-posts.routemisr.com/posts", postData, {
+      api.post("/posts", postData, {
         headers: { token: token },
       }),
     onSuccess: () => {
-      addToast({
-        title: "Posted.",
-        color: "success",
-        icon: <IoIosCheckmarkCircle />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
+      showSuccessToast("Posted.");
       setPostBody("");
       setPostImage(null);
       refetch();
       onClose();
     },
     onError: ({ response }) => {
-      const errorMsg = response.data.message;
-      const cleanErrorMsg = errorMsg
-        .slice(errorMsg.lastIndexOf('"') + 1, errorMsg.length)
-        .trim();
-      addToast({
-        title: `Post ${cleanErrorMsg}.`,
-        color: "danger",
-        icon: <FaRegCircleXmark />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
+      showErrorToast(`Post ${cleanErrorMsg(response?.data?.message)}.`);
     },
   });
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();

@@ -9,70 +9,62 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 // API & Caching
-import axios from "axios";
+import api from "../../api";
 import { useMutation } from "@tanstack/react-query";
 // HeroUI
-import { addToast, Button } from "@heroui/react";
+import { Button } from "@heroui/react";
 // Icons
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebook, FaRegCircleXmark } from "react-icons/fa6";
-import { IoIosCheckmarkCircle } from "react-icons/io";
+import { FaAngleRight, FaFacebook } from "react-icons/fa6";
 // Components
+import { showSuccessToast, showErrorToast } from "../../utils/toast";
 import PasswordInput from "../password-input/PasswordInput";
 import HorizontalDivider from "./../hr/HorizontalDivider";
 import LoginHero from "../login-hero/LoginHero";
+
+const loginSchema = z.object({
+  email: z.email("Please enter a valid email address"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(
+      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+      "Weak Password",
+    ),
+});
 
 export default function Login() {
   const { setToken } = useContext(authContext);
   const { setUserDataFetchEnabled } = useContext(profileContext);
   const navigate = useNavigate();
-  const schema = z.object({
-    email: z.email("Please enter a valid email address"),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .regex(
-        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-        "Weak Password",
-      ),
-  });
   const { handleSubmit, register, formState } = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(loginSchema),
   });
   const { isPending, mutate: logIn } = useMutation({
-    mutationFn: (values) =>
-      axios.post("https://route-posts.routemisr.com/users/signin", values),
+    mutationFn: (values) => api.post("/users/signin", values),
     onSuccess: ({ data }) => {
       setToken(data.data.token);
       localStorage.setItem("token", data.data.token);
       setTimeout(() => {
         navigate("/");
       }, 3000);
-      addToast({
-        title: data.message[0]
+      showSuccessToast(
+        data.message[0]
           .toUpperCase()
           .concat(data.message.slice(1, data.message.length)),
-        color: "success",
-        icon: <IoIosCheckmarkCircle />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
+      );
       setUserDataFetchEnabled(true);
     },
     onError: ({ response }) => {
-      addToast({
-        title: response.data.message[0]
+      showErrorToast(
+        response.data.message[0]
           .toUpperCase()
           .concat(response.data.message.slice(1, response.data.message.length)),
-        color: "danger",
-        icon: <FaRegCircleXmark />,
-        classNames: { icon: "size-5" },
-        timeout: 3000,
-      });
+      );
     },
   });
   return (
@@ -91,7 +83,7 @@ export default function Login() {
                   className="block w-full h-full text-lg font-semibold text-sky-600/50 dark:text-sky-500/40 hover:text-sky-600 dark:hover:text-sky-600 transition-colors"
                 >
                   Sign up
-                  <i className="fas fa-angle-right group-hover:translate-x-0.5 transition-transform"></i>
+                  <FaAngleRight className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
             </div>
