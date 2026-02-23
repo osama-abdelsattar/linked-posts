@@ -144,7 +144,7 @@ export default function Header() {
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownSection showDivider>
+            <DropdownSection showDivider className="mb-1" classNames={{divider:"mt-1"}}>
               <DropdownItem
                 classNames={{
                   base: "data-[hover=true]:bg-sky-100 dark:data-[hover=true]:bg-slate-700/60 dark:data-[hover=true]:text-sky-100",

@@ -17,6 +17,8 @@ import { FaAngleRight, FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { showSuccessToast, showErrorToast } from "../../utils/toast";
 // Components
 import PasswordInput from "../password-input/PasswordInput";
+// Motion
+import { motion } from "framer-motion";
 // Functional Components
 function DatePicker({ id, name, labelText, register, setValue, className }) {
   const [day, setDay] = useState(new Date().getDate());
@@ -275,221 +277,230 @@ export default function Signup() {
     <main className="bg-sky-50 dark:bg-slate-900 transition-colors">
       <div className="grid grid-cols-1 lg:grid-cols-2">
         <LoginHero />
-        <div className="p-8 flex flex-col gap-y-8 justify-center min-h-screen">
-          <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl w-full transition-colors">
-            <div className="flex justify-between items-center">
-              <h1 className="text-4xl font-bold text-sky-900 dark:text-slate-200 transition-colors">
-                Sign Up
-              </h1>
-              <div className="group">
-                <Link
-                  to="/login"
-                  className="block w-full h-full text-lg font-semibold text-sky-600/50 dark:text-sky-500/40 hover:text-sky-600 dark:hover:text-sky-600 transition-colors"
-                >
-                  Log in
-                  <FaAngleRight className="group-hover:translate-x-0.5 transition-transform" />
-                </Link>
-              </div>
-            </div>
-            <form
-              onSubmit={handleSubmit(signUp)}
-              className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6"
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="p-8 flex flex-col gap-y-8 justify-center min-h-screen"
+          children={[
+            <div
+              key="signupPage"
+              className="bg-white dark:bg-slate-800 p-8 rounded-2xl w-full transition-colors"
             >
-              <div className="">
-                <div className="field floating-label">
-                  <input
-                    {...register("name")}
-                    className={`peer ${
-                      formState.errors.name
-                        ? "border-red-400/80 dark:border-red-500/50 focus:ring-red-600/25"
-                        : ""
-                    }`}
-                    type="text"
-                    name="name"
-                    id="name"
-                    placeholder=""
-                    autoComplete="name"
-                  />
-                  <label htmlFor="name">Full Name</label>
+              <div className="flex justify-between items-center">
+                <h1 className="text-4xl font-bold text-sky-900 dark:text-slate-200 transition-colors">
+                  Sign Up
+                </h1>
+                <div className="group">
+                  <Link
+                    to="/login"
+                    className="flex items-center gap-1 w-full h-full text-lg font-semibold text-sky-600/50 dark:text-sky-500/40 hover:text-sky-600 dark:hover:text-sky-600 transition-colors"
+                  >
+                    Log in
+                    <FaAngleRight className="group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
                 </div>
-                {formState.errors.name && (
-                  <div
-                    className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"
-                    role="alert"
-                  >
-                    <span className="font-medium">
-                      {formState.errors.name.message}
-                    </span>
-                  </div>
-                )}
               </div>
-              <div className="">
-                <div className="field floating-label">
-                  <input
-                    {...register("username")}
-                    className={`peer ${
-                      formState.errors.username
-                        ? "border-red-400/80 dark:border-red-500/50 focus:ring-red-600/25"
-                        : ""
-                    }`}
-                    type="text"
-                    name="username"
-                    id="username"
-                    placeholder=""
-                    autoComplete="username"
-                  />
-                  <label htmlFor="username">Username (optional)</label>
-                </div>
-                {formState.errors.username && (
-                  <div
-                    className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"
-                    role="alert"
-                  >
-                    <span className="font-medium">
-                      {formState.errors.username.message}
-                    </span>
+              <form
+                onSubmit={handleSubmit(signUp)}
+                className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6"
+              >
+                <div className="">
+                  <div className="field floating-label">
+                    <input
+                      {...register("name")}
+                      className={`peer ${
+                        formState.errors.name
+                          ? "border-red-400/80 dark:border-red-500/50 focus:ring-red-600/25"
+                          : ""
+                      }`}
+                      type="text"
+                      name="name"
+                      id="name"
+                      placeholder=""
+                      autoComplete="name"
+                    />
+                    <label htmlFor="name">Full Name</label>
                   </div>
-                )}
-              </div>
-              <div className="md:col-span-2 lg:col-span-1 xl:col-span-2">
-                <div className="field floating-label">
-                  <input
-                    {...register("email")}
-                    className={`peer ${
-                      formState.errors.email
-                        ? "border-red-400/80 dark:border-red-500/50 focus:ring-red-600/25"
-                        : ""
-                    }`}
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder=""
-                    autoComplete="email"
-                  />
-                  <label htmlFor="email">Email</label>
-                </div>
-                {formState.errors.email && (
-                  <div
-                    className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"
-                    role="alert"
-                  >
-                    <span className="font-medium">
-                      {formState.errors.email.message}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="">
-                <PasswordInput
-                  register={{ ...register("password") }}
-                  id="password"
-                  labelText="Password"
-                  floatingLabel
-                  inputProps={{ autoComplete: "new-password webauthn" }}
-                />
-                {formState.errors.password && (
-                  <div
-                    className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"
-                    role="alert"
-                  >
-                    <span className="font-medium">
-                      {formState.errors.password.message}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="">
-                <PasswordInput
-                  register={{ ...register("rePassword") }}
-                  id="rePassword"
-                  labelText="Confirm Password"
-                  floatingLabel
-                  inputProps={{ autoComplete: "new-password webauthn" }}
-                />
-                {formState.errors.rePassword && (
-                  <div
-                    className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"
-                    role="alert"
-                  >
-                    <span className="font-medium">
-                      {formState.errors.rePassword.message}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="">
-                <DatePicker
-                  id="birthDay"
-                  name="birthDay"
-                  labelText="Date of birth"
-                  register={{ ...register("dateOfBirth") }}
-                  setValue={setValue}
-                  className={
-                    formState.errors.dateOfBirth
-                      ? "border-red-400/80 dark:border-red-500/50 focus:ring-red-600/25"
-                      : ""
-                  }
-                />
-                {formState.errors.dateOfBirth && (
-                  <div
-                    className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"
-                    role="alert"
-                  >
-                    <span className="font-medium">
-                      {formState.errors.dateOfBirth.message}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="">
-                <div className="field h-full">
-                  <fieldset className="flex gap-x-12 items-center h-full">
-                    <div className="flex items-center gap-x-2">
-                      <input
-                        {...register("gender")}
-                        className="peer"
-                        type="radio"
-                        name="gender"
-                        id="male"
-                        value="male"
-                      />
-                      <label htmlFor="male">Male</label>
-                    </div>
-                    <div className="flex items-center gap-x-2">
-                      <input
-                        {...register("gender")}
-                        className="peer"
-                        type="radio"
-                        name="gender"
-                        id="female"
-                        value="female"
-                      />
-                      <label htmlFor="female">Female</label>
-                    </div>
-                  </fieldset>
-                  <span className="label">Gender</span>
-                  {formState.errors.gender && (
+                  {formState.errors.name && (
                     <div
                       className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"
                       role="alert"
                     >
                       <span className="font-medium">
-                        {formState.errors.gender.message}
+                        {formState.errors.name.message}
                       </span>
                     </div>
                   )}
                 </div>
-              </div>
-              <Button
-                isLoading={isPending}
-                className="bg-sky-500 dark:bg-sky-400/50 text-sky-50 h-fit md:col-span-2 lg:col-span-1 xl:col-span-2 py-4"
-                type="submit"
-              >
-                Create your account
-              </Button>
-            </form>
-          </div>
-        </div>
+                <div className="">
+                  <div className="field floating-label">
+                    <input
+                      {...register("username")}
+                      className={`peer ${
+                        formState.errors.username
+                          ? "border-red-400/80 dark:border-red-500/50 focus:ring-red-600/25"
+                          : ""
+                      }`}
+                      type="text"
+                      name="username"
+                      id="username"
+                      placeholder=""
+                      autoComplete="username"
+                    />
+                    <label htmlFor="username">Username (optional)</label>
+                  </div>
+                  {formState.errors.username && (
+                    <div
+                      className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"
+                      role="alert"
+                    >
+                      <span className="font-medium">
+                        {formState.errors.username.message}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="md:col-span-2 lg:col-span-1 xl:col-span-2">
+                  <div className="field floating-label">
+                    <input
+                      {...register("email")}
+                      className={`peer ${
+                        formState.errors.email
+                          ? "border-red-400/80 dark:border-red-500/50 focus:ring-red-600/25"
+                          : ""
+                      }`}
+                      type="email"
+                      name="email"
+                      id="email"
+                      placeholder=""
+                      autoComplete="email"
+                    />
+                    <label htmlFor="email">Email</label>
+                  </div>
+                  {formState.errors.email && (
+                    <div
+                      className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"
+                      role="alert"
+                    >
+                      <span className="font-medium">
+                        {formState.errors.email.message}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="">
+                  <PasswordInput
+                    register={{ ...register("password") }}
+                    id="password"
+                    labelText="Password"
+                    floatingLabel
+                    inputProps={{ autoComplete: "new-password webauthn" }}
+                  />
+                  {formState.errors.password && (
+                    <div
+                      className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"
+                      role="alert"
+                    >
+                      <span className="font-medium">
+                        {formState.errors.password.message}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="">
+                  <PasswordInput
+                    register={{ ...register("rePassword") }}
+                    id="rePassword"
+                    labelText="Confirm Password"
+                    floatingLabel
+                    inputProps={{ autoComplete: "new-password webauthn" }}
+                  />
+                  {formState.errors.rePassword && (
+                    <div
+                      className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"
+                      role="alert"
+                    >
+                      <span className="font-medium">
+                        {formState.errors.rePassword.message}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="">
+                  <DatePicker
+                    id="birthDay"
+                    name="birthDay"
+                    labelText="Date of birth"
+                    register={{ ...register("dateOfBirth") }}
+                    setValue={setValue}
+                    className={
+                      formState.errors.dateOfBirth
+                        ? "border-red-400/80 dark:border-red-500/50 focus:ring-red-600/25"
+                        : ""
+                    }
+                  />
+                  {formState.errors.dateOfBirth && (
+                    <div
+                      className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"
+                      role="alert"
+                    >
+                      <span className="font-medium">
+                        {formState.errors.dateOfBirth.message}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="">
+                  <div className="field h-full">
+                    <fieldset className="flex gap-x-12 items-center h-full">
+                      <div className="flex items-center gap-x-2">
+                        <input
+                          {...register("gender")}
+                          className="peer"
+                          type="radio"
+                          name="gender"
+                          id="male"
+                          value="male"
+                        />
+                        <label htmlFor="male">Male</label>
+                      </div>
+                      <div className="flex items-center gap-x-2">
+                        <input
+                          {...register("gender")}
+                          className="peer"
+                          type="radio"
+                          name="gender"
+                          id="female"
+                          value="female"
+                        />
+                        <label htmlFor="female">Female</label>
+                      </div>
+                    </fieldset>
+                    <span className="label">Gender</span>
+                    {formState.errors.gender && (
+                      <div
+                        className="text-sm mt-2 text-red-400 dark:text-red-500/70 transition-colors rounded-base"
+                        role="alert"
+                      >
+                        <span className="font-medium">
+                          {formState.errors.gender.message}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <Button
+                  isLoading={isPending}
+                  className="bg-sky-500 dark:bg-sky-400/50 text-sky-50 h-fit md:col-span-2 lg:col-span-1 xl:col-span-2 py-4"
+                  type="submit"
+                >
+                  Create your account
+                </Button>
+              </form>
+            </div>,
+          ]}
+        />
       </div>
     </main>
   );
