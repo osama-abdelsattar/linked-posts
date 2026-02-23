@@ -19,3 +19,15 @@ export function showErrorToast(title, description = undefined) {
     icon: <FaRegCircleXmark />,
   });
 }
+
+export function showInfoToast(
+  title,
+  description = undefined,
+  icon = undefined,
+) {
+  addToast({
+    title,
+    description,
+    icon,
+  });
+}

@@ -2,7 +2,10 @@
 import { useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
 // HeroUI
-import { showSuccessToast, showErrorToast } from "../utils/toast";
+import { showInfoToast } from "../utils/toast";
+// Icons
+import { CiWifiOff } from "react-icons/ci";
+import { CiWifiOn } from "react-icons/ci";
 // Components
 import Header from "./header/Header";
 // Network
@@ -21,11 +24,18 @@ export default function Layout() {
       prevIsOnline.current = isOnline;
       return;
     }
-    if (!isOnline) {
-      showErrorToast("You're offline", "Check your internet connection.");
-    } else {
-      showSuccessToast("You're back online", "Internet connection restored.");
-    }
+    if (!isOnline)
+      showInfoToast(
+        "You're offline",
+        "Check your internet connection.",
+        <CiWifiOff />,
+      );
+    else
+      showInfoToast(
+        "You're back online",
+        "Internet connection restored.",
+        <CiWifiOn />,
+      );
   }, [isOnline]);
   const isFetching = useIsFetching();
 
