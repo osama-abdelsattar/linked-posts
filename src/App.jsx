@@ -68,7 +68,6 @@ export default function App() {
           ),
         },
       ],
-      errorElement: <Error />,
     },
     {
       path: "signup",
@@ -86,6 +85,7 @@ export default function App() {
         </Authorize>
       ),
     },
+    { path: "*", element: <Error /> },
   ]);
   useEffect(() => {
     document.documentElement.classList =

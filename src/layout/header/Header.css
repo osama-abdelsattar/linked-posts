@@ -3,35 +3,12 @@
 .btn-secondary {
   @apply cursor-pointer text-sky-600 border-2 border-sky-600 hover:bg-sky-600 hover:text-sky-50 dark:text-sky-600 dark:border-sky-700 dark:hover:bg-sky-700 dark:hover:text-sky-100 transition-colors rounded-xl py-2 px-3;
 }
-.menu li > .nav-link {
-  @apply text-slate-500/80 hover:text-slate-600 dark:text-sky-100 dark:hover:text-slate-300/80 transition-colors;
+.nav-link {
+  @apply flex items-center gap-1.5 text-slate-500/80 hover:text-slate-600 dark:text-sky-100 dark:hover:text-slate-300/80 transition-colors;
 }
-.menu li > .nav-link.active {
-  @apply text-sky-600;
+.nav-link.active {
+  @apply text-sky-600 font-medium;
 }
 .btn-tertiary {
   @apply cursor-pointer text-slate-500/80 border-2 border-slate-400 hover:bg-slate-500 hover:border-slate-500 hover:text-slate-100 dark:text-slate-400/80 dark:border-slate-500/70 dark:hover:bg-slate-700 dark:hover:border-slate-700 dark:hover:text-slate-300 transition-colors rounded-xl py-2 px-4;
-}
-@media (max-width: 64rem) {
-  .menu {
-    @apply absolute opacity-0 z-50 top-20 right-0 translate-x-full w-full sm:w-68 h-[calc(100vh-5rem)] bg-sky-100 dark:bg-slate-800  border-slate-300 shadow-xl shadow-slate-900/60 transition-all p-6 flex-col gap-6;
-  }
-  .menu ul {
-    @apply flex-col;
-  }
-  .menu li {
-    @apply w-full;
-  }
-  .menu li > .nav-link {
-    @apply block dark:text-slate-400 dark:hover:text-slate-300/90 hover:bg-sky-200/40 dark:hover:bg-slate-900/30 hover:text-slate-600/80 transition-colors py-3! px-4 w-full h-full rounded-lg;
-  }
-  .menu li > .nav-link.active {
-    @apply bg-sky-500 dark:bg-sky-700 text-sky-100;
-  }
-  .menu .switch + div .btn-tertiary {
-    @apply dark:border-slate-600 dark:text-slate-500 dark:hover:text-slate-300 dark:hover:bg-slate-700 dark:hover:border-slate-700;
-  }
-  .menu-overlay {
-    @apply fixed top-20 left-0 w-screen h-screen z-40 bg-black/60;
-  }
 }

@@ -21,68 +21,29 @@ import { GoPasskeyFill } from "react-icons/go";
 import PasswordInput from "../password-input/PasswordInput";
 import ThemeSwitch from "../themeSwitch/ThemeSwitch";
 // Functional Components
-function AccountSettings() {
-  return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-4">
-        <FaUserCircle className="size-10" />
-        <div className="">
-          <h2 className="text-xl font-medium">Account</h2>
-          <p className="text-slate-500">Change name, username, etc.</p>
-        </div>
-      </div>
-      <div className="flex flex-col gap-4">
-        <div className="">
-          <div className="flex justify-between">
-            <h3 className="text-lg font-medium mb-2 text-gray-400 dark:text-gray-600">
-              Change username:
-            </h3>
-            <Chip
-              className="bg-gray-200 text-gray-400 dark:bg-gray-700/60 dark:text-gray-500 transition-colors"
-              size="md"
-            >
-              Coming soon...
-            </Chip>
-          </div>
-          <div className="flex gap-2">
-            <div className="field grow">
-              <input type="text" placeholder="" className="grow" disabled />
-            </div>
-            <Button
-              isDisabled
-              className="bg-sky-500 dark:bg-sky-400/50 text-sky-50 h-[stretch]"
-            >
-              Change
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 function AppearanceSettings() {
   const themes = [
     { key: "default", label: "Default (blue)" },
     { key: "soon", label: "Coming soon...." },
   ];
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <div className="flex items-center gap-4">
-        <PiWrenchFill className="size-10" />
+        <PiWrenchFill className="size-7 md:size-9" />
         <div className="">
-          <h2 className="text-xl font-medium">Appearance</h2>
-          <p className="text-slate-500">
+          <h2 className="text-lg md:text-xl font-medium">Appearance</h2>
+          <p className="text-sm md:text-base text-slate-500">
             Customise the app's appearance as you wish.
           </p>
         </div>
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <span>Dark mode</span>
+          <span className="text-sm md:text-base">Dark mode</span>
           <ThemeSwitch />
         </div>
         <div className="flex justify-between items-center">
-          <span>Theme</span>
+          <span className="text-sm md:text-base">Theme</span>
           <Select
             disabledKeys={["soon"]}
             className="max-w-48"
@@ -92,11 +53,51 @@ function AppearanceSettings() {
               value: "text-slate-500 dark:text-sky-100",
             }}
             placeholder="Select a theme"
+            aria-label="Change Theme"
           >
             {themes.map((theme) => (
               <SelectItem key={theme.key}>{theme.label}</SelectItem>
             ))}
           </Select>
+        </div>
+      </div>
+    </div>
+  );
+}
+function AccountSettings() {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-4">
+        <FaUserCircle className="size-7 md:size-9" />
+        <div className="">
+          <h2 className="text-lg md:text-xl font-medium">Account</h2>
+          <p className="text-sm md:text-base text-slate-500">
+            Change name, username, etc.
+          </p>
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between">
+          <h3 className="md:text-lg font-medium text-gray-400 dark:text-gray-600 transition-colors">
+            Change username:
+          </h3>
+          <Chip
+            className="bg-gray-200 text-gray-400 dark:bg-gray-700/60 dark:text-gray-500 transition-colors"
+            size="sm"
+          >
+            Coming soon...
+          </Chip>
+        </div>
+        <div className="flex gap-2">
+          <div className="field grow">
+            <input type="text" placeholder="" className="grow" disabled />
+          </div>
+          <Button
+            isDisabled
+            className="bg-sky-500 dark:bg-sky-400/50 text-sky-50 h-[stretch]"
+          >
+            Change
+          </Button>
         </div>
       </div>
     </div>
@@ -176,17 +177,19 @@ function SecuritySettings() {
     },
   });
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <div className="flex items-center gap-4">
-        <GoPasskeyFill className="size-10" />
+        <GoPasskeyFill className="size-7 md:size-9" />
         <div className="">
-          <h2 className="text-xl font-medium">Security</h2>
-          <p className="text-slate-500">Change password, etc.</p>
+          <h2 className="text-lg md:text-xl font-medium">Security</h2>
+          <p className="text-sm md:text-base text-slate-500">
+            Change password, etc.
+          </p>
         </div>
       </div>
       <form onSubmit={handleSubmit(changePassword)}>
-        <div className="flex flex-col gap-4">
-          <h3 className="text-lg font-medium">Change password:</h3>
+        <div className="flex flex-col gap-3 md:gap-4">
+          <h3 className="md:text-lg font-medium">Change password:</h3>
           <div className="">
             <PasswordInput
               id="oldPass"
@@ -259,14 +262,16 @@ function SecuritySettings() {
 
 export default function Settings() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 p-4 md:p-8 sm:rounded-2xl bg-white dark:bg-slate-800 transition-colors">
       <div className="">
-        <h1 className="text-5xl font-semibold mb-2">Settings</h1>
-        <p className="text-lg text-slate-500">
+        <h1 className="text-2xl sm:text-4xl md:text-5xl font-semibold sm:mb-1 md:mb-2">
+          Settings
+        </h1>
+        <p className="md:text-lg text-slate-500">
           Change password, toggle dark theme, and more.
         </p>
       </div>
-      <div className="grid lg:grid-cols-2 gap-12">
+      <div className="grid lg:grid-cols-2 gap-x-12 gap-y-6">
         <AppearanceSettings />
         <AccountSettings />
         <SecuritySettings />

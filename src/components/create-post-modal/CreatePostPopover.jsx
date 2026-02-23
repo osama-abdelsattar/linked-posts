@@ -72,8 +72,9 @@ export default function CreatePostPopover({
         {btnIcon} {btnText}
       </Button>
       <Modal
+        placement="center"
         backdrop="blur"
-        className="bg-sky-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 max-w-2xl"
+        className="bg-sky-50 text-slate-700 dark:bg-slate-700 dark:text-slate-300 max-w-2xl"
         classNames={{
           closeButton:
             "hover:bg-sky-200 hover:text-sky-600 dark:hover:bg-slate-800/25 dark:hover:text-slate-300/85 transition-colors cursor-pointer top-2 right-2",

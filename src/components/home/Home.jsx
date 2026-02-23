@@ -22,7 +22,7 @@ import "./Home.css";
 // Icons
 import { RiSendPlaneFill } from "react-icons/ri";
 import { CgArrowsExpandUpRight } from "react-icons/cg";
-import { FaRegCircleXmark } from "react-icons/fa6";
+import { FaPlus, FaRegCircleXmark } from "react-icons/fa6";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 // Components
 import SkeletonPost from "./post/SkeletonPost";
@@ -85,25 +85,25 @@ export default function Home() {
   return (
     <>
       {isPostsFetching && <ReloadSpinner />}
-      <div className="flex items-end justify-between mb-6">
+      <div className="hidden sm:flex items-end justify-between p-6 sm:p-0 sm:mb-6">
         <div className="flex flex-col">
-          <h1 className="text-5xl font-semibold mb-2">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold lg:mb-2">
             Hello,{" "}
             {userData?.data.data.user.name.split(" ").at(0) || (
-              <Skeleton className="rounded-sm dark:bg-slate-600/60 inline-block w-32 h-8 me-1.5" />
+              <Skeleton className="rounded-sm dark:bg-slate-600/60 inline-block w-26 md:w-32 h-6 md:h-8 me-1.5" />
             )}
             !
           </h1>
-          <p className="text-xl font-medium text-slate-500">
+          <p className="md:text-lg lg:text-xl font-medium text-slate-500">
             See what's new in the world.
           </p>
         </div>
-        <Link to="/profile">
+        <Link className="hidden md:block" to="/profile">
           <UserAvatar size="lg" src={userData?.data.data.user.photo} />
         </Link>
       </div>
-      <Card className="dark:bg-slate-700/60 transition-colors mb-8 py-4">
-        <CardHeader className="flex gap-3 px-6 justify-between">
+      <Card shadow="sm" className="flex rounded-none py-2 mb-4 sm:mb-6 md:mb-8 sm:py-4 sm:rounded-xl dark:bg-slate-700/60 transition-colors">
+        <CardHeader className="flex gap-3 px-4 sm:px-6 justify-between">
           <div className="flex flex-col">
             <p className="font-medium text-slate-700 dark:text-slate-300 transition-colors mb-[-2px]">
               Create a post
@@ -113,12 +113,12 @@ export default function Home() {
             </p>
           </div>
           <CreatePostPopover
+            btnIcon={<CgArrowsExpandUpRight className="size-5 md:size-6" />}
+            btnClassName="size-10 md:size-12 p-0 min-w-fit bg-sky-100 text-sky-600 dark:bg-slate-700 dark:text-sky-100"
             refetch={refetch}
-            btnIcon={<CgArrowsExpandUpRight />}
-            btnClassName="text-xl min-w-fit min-h-fit p-2 bg-sky-100 text-sky-600 dark:bg-slate-700 dark:text-sky-100"
           />
         </CardHeader>
-        <CardBody className="px-6">
+        <CardBody className="px-4 sm:px-6">
           <textarea
             name="post"
             placeholder="What's on your mind?"
@@ -130,7 +130,7 @@ export default function Home() {
             value={postBody}
           ></textarea>
         </CardBody>
-        <CardFooter className="flex items-center px-6">
+        <CardFooter className="flex items-center px-4 sm:px-6">
           <Button
             onPress={() => {
               const postData = new FormData();
@@ -147,7 +147,7 @@ export default function Home() {
           </Button>
         </CardFooter>
       </Card>
-      <h2 className="text-3xl font-semibold mb-6">Posts</h2>
+      <h2 className="hidden sm:block text-3xl font-semibold mb-6">Posts</h2>
       {isPostsLoading ? (
         <SkeletonPost />
       ) : (

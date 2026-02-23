@@ -6,8 +6,8 @@ export default function UserAvatar(props) {
     <Avatar
       {...props}
       classNames={{
-        base: "bg-slate-200 dark:bg-slate-600 transition-colors",
-        icon: "text-slate-500 dark:text-slate-400 transition-colors size-10",
+        base: "bg-sky-50 dark:bg-slate-600 ring-slate-300 dark:ring-slate-600 ring-offset-sky-100 dark:ring-offset-slate-800 transition-colors",
+        icon: "text-slate-500 dark:text-slate-400 transition-colors",
       }}
     />
   );

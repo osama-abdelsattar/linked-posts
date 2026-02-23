@@ -25,7 +25,7 @@ export default function PostBody({
           if (!bodyNavigateTo) return;
           navigate(bodyNavigateTo);
         }}
-        className={`${post.body ? "p-4" : ""} text-slate-700 dark:text-slate-300 ${bodyClassName || ""}`}
+        className={`${post.body ? "p-3 sm:p-4" : ""} text-sm sm:text-base text-slate-700 dark:text-slate-300 ${bodyClassName || ""}`}
       >
         {post.body}
       </p>
@@ -50,6 +50,7 @@ export default function PostBody({
           <Modal
             backdrop="blur"
             radius="none"
+            placement="center"
             classNames={{
               closeButton:
                 "size-8 p-0 flex justify-center items-center top-2 end-2 text-lg cursor-pointer text-neutral-400 hover:bg-rose-500/10 backdrop-blur-lg hover:text-danger active:bg-rose-500/25 active:text-rose-600 transition-colors z-50",

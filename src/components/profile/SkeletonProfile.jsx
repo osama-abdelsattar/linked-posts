@@ -3,7 +3,7 @@ import { Card, Skeleton } from "@heroui/react";
 
 export default function SkeletonProfile() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-2 sm:gap-6">
       <Card className="dark:bg-slate-700/60 transition-colors p-4 gap-4">
         <Skeleton className="w-full h-56 object-cover rounded-lg dark:bg-slate-600/60 transition-colors" />
         <div className="w-full flex justify-start lg:grid grid-cols-[2fr_3fr_2fr] items-center gap-3 flex-wrap">

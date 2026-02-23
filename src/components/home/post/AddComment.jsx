@@ -59,7 +59,7 @@ export default function AddComment({ postId, refetch, className }) {
   return (
     <div className={`px-4 ${className || ""}`}>
       <div className="flex items-center gap-3">
-        <Link className="shrink-0" to="/profile">
+        <Link className="hidden md:block shrink-0" to="/profile">
           <UserAvatar src={userData?.data.data.user.photo} />
         </Link>
         <div className="field w-full">
@@ -76,15 +76,15 @@ export default function AddComment({ postId, refetch, className }) {
           />
         </div>
         <Button
-          className="bg-sky-500 dark:bg-sky-400/50 text-sky-50 px-4!"
+          className="bg-sky-500 dark:bg-sky-400/50 text-sky-50 min-w-fit h-fit p-0 size-10 md:px-4 shrink-0"
           radius="full"
           isLoading={isPending}
           startContent={
-            !isPending && <RiSendPlaneFill className="shrink-0 size-4" />
+            !isPending && <RiSendPlaneFill className="shrink-0 size-5" />
           }
           onPress={mutate}
         >
-          Comment
+          <span className="hidden md:inline">Comment</span>
         </Button>
       </div>
     </div>

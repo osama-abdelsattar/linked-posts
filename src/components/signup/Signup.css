@@ -7,7 +7,7 @@
   @apply relative;
 }
 .field > input {
-  @apply py-3 px-4 dark:text-slate-300 border-2 border-slate-400 dark:border-slate-700 focus:border-slate-500/70 dark:focus:border-slate-600 not-placeholder-shown:focus:border-sky-800/60 dark:not-placeholder-shown:focus:border-sky-800/90 focus:ring-4 focus:ring-offset-0 focus:ring-slate-500/50 dark:focus:ring-slate-700/90 not-placeholder-shown:border-sky-800/60 dark:not-placeholder-shown:border-sky-800/70 not-placeholder-shown:focus:ring-sky-800/40 disabled:bg-gray-200 disabled:cursor-not-allowed disabled:border-gray-300 dark:disabled:bg-gray-800 dark:disabled:border-gray-700 outline-0 rounded-xl transition;
+  @apply py-3 px-4 dark:text-slate-300 border-2 border-slate-300 dark:border-slate-600/80 focus:border-slate-400/70 dark:focus:border-slate-600 not-placeholder-shown:focus:border-sky-800/40 dark:not-placeholder-shown:focus:border-sky-800/80 focus:ring-4 focus:ring-offset-0 focus:ring-slate-500/30 dark:focus:ring-slate-700/90 not-placeholder-shown:border-sky-800/50 dark:not-placeholder-shown:border-sky-800/70 not-placeholder-shown:focus:ring-sky-800/25 disabled:bg-gray-200 disabled:cursor-not-allowed disabled:border-gray-300 dark:disabled:bg-gray-800 dark:disabled:border-gray-700 outline-0 rounded-xl transition placeholder:text-slate-500/60;
 }
 input[type="radio"],
 input[type="checkbox"] {

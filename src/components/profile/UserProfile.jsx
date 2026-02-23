@@ -39,18 +39,19 @@ export default function UserProfile() {
       { headers: { token: token } },
     );
   }
-  if (params.userId === myDataContext.userData.data.data.user._id)
+  if (params.userId === myDataContext.userData?.data.data.user._id)
     return <MyProfile />;
   return userDataLoading ? (
     <SkeletonProfile />
   ) : (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-2 sm:gap-6">
       <ProfileContent
         data={userData}
         posts={userPosts}
         isPostsLoading={userPostsLoading}
+        noPictureEdit
       />
-      <div className="flex-col items-start p-0">
+      <div className="flex-col items-start py-3 px-4 sm:p-0">
         <h2 className="text-3xl font-semibold">Posts</h2>
       </div>
       <ProfilePosts

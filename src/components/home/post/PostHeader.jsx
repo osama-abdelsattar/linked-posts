@@ -135,16 +135,16 @@ export default function PostHeader({ post, refetch }) {
                 base: "bg-slate-200 dark:bg-slate-600",
                 icon: "text-slate-500 dark:text-slate-400 size-8",
               }}
-              className="size-11"
+              className="size-9 md:size-11"
               isBordered
               src={post.user.photo}
             />
           </Link>
           <div className="flex flex-col">
-            <p className="font-medium text-slate-700 dark:text-slate-300 transition-colors">
+            <p className="text-[15px] md:text-base font-medium text-slate-700 dark:text-slate-300 transition-colors">
               {post.user.name}
             </p>
-            <p className="text-small text-slate-500">
+            <p className="text-[13px] md:text-sm text-slate-500">
               {new Date(post.createdAt).toLocaleString("en-GB", {
                 day: "2-digit",
                 month: "short",
@@ -156,7 +156,10 @@ export default function PostHeader({ post, refetch }) {
             </p>
           </div>
         </div>
-        <Dropdown classNames={{ content: "bg-sky-100 dark:bg-slate-700" }}>
+        <Dropdown
+          placement="bottom-end"
+          classNames={{ content: "bg-sky-50 dark:bg-slate-700" }}
+        >
           <DropdownTrigger>
             <div className="text-xl py-2 px-1 bg-transparent dark:hover:bg-white/5 transition-background cursor-pointer rounded-md">
               <BsThreeDotsVertical />
@@ -175,7 +178,7 @@ export default function PostHeader({ post, refetch }) {
               Save
             </DropdownItem>
             {post.user._id === userData?.data.data.user._id ? (
-              <>
+              [
                 <DropdownItem
                   key="Edit Post"
                   classNames={{
@@ -186,7 +189,7 @@ export default function PostHeader({ post, refetch }) {
                   onPress={onUpdateModalOpen}
                 >
                   Edit
-                </DropdownItem>
+                </DropdownItem>,
                 <DropdownItem
                   key="Delete Post"
                   startContent={<FaTrash />}
@@ -197,8 +200,8 @@ export default function PostHeader({ post, refetch }) {
                   onPress={onDeleteModalOpen}
                 >
                   Delete
-                </DropdownItem>
-              </>
+                </DropdownItem>,
+              ]
             ) : (
               <DropdownItem
                 key={`Follow ${post.user.name}`}

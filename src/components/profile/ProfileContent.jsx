@@ -7,10 +7,69 @@ import { FaCalendar, FaEnvelope, FaPen } from "react-icons/fa6";
 // Styles
 import "./Profile.css";
 
-export default function ProfileContent({ data, posts, isPostsLoading }) {
+export default function ProfileContent({ data, posts, isPostsLoading, noPictureEdit }) {
+  const aboutMiniCards = [
+    {
+      icon: <FaEnvelope />,
+      label: "Email",
+      content: (
+        <a
+          href={`mailto:${data.data.data.user.email}`}
+          className="text-sm text-slate-500"
+        >
+          {data.data.data.user.email}
+        </a>
+      ),
+      color: "sky",
+    },
+    {
+      icon: <FaCalendar />,
+      label: "Birthday",
+      content: (
+        <span className="text-sm text-slate-500">
+          {new Date(data.data.data.user.dateOfBirth).toLocaleDateString(
+            "en-GB",
+            {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            },
+          )}
+        </span>
+      ),
+      color: "teal",
+    },
+    {
+      icon: <TbGenderBigender className="text-2xl" />,
+      label: "Gender",
+      content: (
+        <span className="text-sm text-slate-500 capitalize">
+          {data.data.data.user.gender}
+        </span>
+      ),
+      color: "cyan",
+    },
+    {
+      icon: <IoCreate />,
+      label: "Created at",
+      content: (
+        <span className="text-sm text-slate-500">
+          {new Date(data.data.data.user.createdAt).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+          })}
+        </span>
+      ),
+      color: "blue",
+    },
+  ];
   return (
     <>
-      <Card className="dark:bg-slate-700/60 text-slate-700 dark:text-sky-50 transition-colors p-4 gap-4">
+      <Card
+        shadow="sm"
+        className="dark:bg-slate-700/60 text-slate-700 dark:text-sky-50 transition-colors p-4 gap-4 rounded-none sm:rounded-lg"
+      >
         <Image
           width={"100%"}
           src={
@@ -66,85 +125,35 @@ export default function ProfileContent({ data, posts, isPostsLoading }) {
               }}
               className="transition-colors size-14"
             />
-            <div className="absolute bottom-0 start-0 bg-sky-500 dark:bg-sky-600 transition-colors text-sky-50 rounded-full size-5 -translate-x-1/4 flex justify-center items-center">
-              <FaPen className="text-[10px]" />
-              <span className="sr-only">Change profile picture</span>
-            </div>
+            {!noPictureEdit && (
+              <div className="absolute bottom-0 start-0 bg-sky-500 dark:bg-sky-600 transition-colors text-sky-50 rounded-full size-5 -translate-x-1/4 flex justify-center items-center">
+                <FaPen className="text-[10px]" />
+                <span className="sr-only">Change profile picture</span>
+              </div>
+            )}
           </div>
         </div>
       </Card>
-      <Card className="dark:bg-slate-700/60 text-slate-700 dark:text-sky-50 transition-colors p-6 gap-4">
+      <Card
+        shadow="sm"
+        className="dark:bg-slate-700/60 text-slate-700 dark:text-sky-50 transition-colors p-6 gap-4 rounded-none sm:rounded-lg"
+      >
         <h2 className="text-xl font-semibold">About</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="bg-slate-200/60 dark:bg-slate-700 transition-colors rounded-lg py-3 px-4 flex items-center gap-3">
-            <div className="icon bg-sky-200 dark:bg-sky-500/80 text-sky-600 dark:text-sky-50 transition-colors rounded-md">
-              <FaEnvelope />
+          {aboutMiniCards.map(({ icon, label, content, color }) => (
+            <div
+              key={label}
+              className="bg-slate-200/60 dark:bg-slate-700 transition-colors rounded-lg py-3 px-4 flex items-center gap-3"
+            >
+              <div className={`icon ${color} rounded-md`}>{icon}</div>
+              <div className="content">
+                <span className="-mb-0.5 font-medium text-slate-700 dark:text-slate-400 transition-colors">
+                  {label}
+                </span>
+                {content}
+              </div>
             </div>
-            <div className="content">
-              <span className="-mb-0.5 font-medium text-slate-700 dark:text-slate-400 transition-colors">
-                Email
-              </span>
-              <a
-                href={`mailto:${data.data.data.user.email}`}
-                className="text-sm text-slate-500"
-              >
-                {data.data.data.user.email}
-              </a>
-            </div>
-          </div>
-          <div className="bg-slate-200/60 dark:bg-slate-700 transition-colors rounded-lg py-3 px-4 flex items-center gap-3">
-            <div className="icon bg-teal-200 dark:bg-teal-500/80 text-teal-600 dark:text-teal-50 transition-colors rounded-md">
-              <FaCalendar />
-            </div>
-            <div className="content">
-              <span className="-mb-0.5 font-medium text-slate-700 dark:text-slate-400 transition-colors">
-                Birthday
-              </span>
-              <span className="text-sm text-slate-500">
-                {new Date(data.data.data.user.dateOfBirth).toLocaleDateString(
-                  "en-GB",
-                  {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric",
-                  },
-                )}
-              </span>
-            </div>
-          </div>
-          <div className="bg-slate-200/60 dark:bg-slate-700 transition-colors rounded-lg py-3 px-4 flex items-center gap-3">
-            <div className="icon bg-cyan-200 dark:bg-cyan-500/80 text-cyan-600 dark:text-cyan-50 transition-colors rounded-md">
-              <TbGenderBigender className="text-2xl" />
-            </div>
-            <div className="content">
-              <span className="-mb-0.5 font-medium text-slate-700 dark:text-slate-400 transition-colors">
-                Gender
-              </span>
-              <span className="text-sm text-slate-500 capitalize">
-                {data.data.data.user.gender}
-              </span>
-            </div>
-          </div>
-          <div className="bg-slate-200/60 dark:bg-slate-700 transition-colors rounded-lg py-3 px-4 flex items-center gap-3">
-            <div className="icon bg-blue-200 dark:bg-blue-500/80 text-blue-600 dark:text-blue-50 transition-colors rounded-md">
-              <IoCreate />
-            </div>
-            <div className="content">
-              <span className="-mb-0.5 font-medium text-slate-700 dark:text-slate-400 transition-colors">
-                Created at
-              </span>
-              <span className="text-sm text-slate-500">
-                {new Date(data.data.data.user.createdAt).toLocaleDateString(
-                  "en-GB",
-                  {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric",
-                  },
-                )}
-              </span>
-            </div>
-          </div>
+          ))}
         </div>
       </Card>
     </>

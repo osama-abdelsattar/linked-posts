@@ -26,7 +26,7 @@ export default function ProfilePosts({
       ) : (
         posts.data.data.posts.map((post) => (
           <PostCard
-            className={"mb-0"}
+            className={"mb-0!"}
             key={post._id}
             post={post}
             refetch={refetch}

@@ -7,8 +7,8 @@ export default function Layout() {
   return (
     <>
       <Header />
-      <main className="mt-20 font-[inter]">
-        <div className="max-w-7xl mx-auto py-12 px-8">
+      <main className="font-[inter]">
+        <div className="max-w-7xl mx-auto sm:py-6 lg:py-12 sm:px-6 lg:px-8">
           <Outlet />
         </div>
       </main>

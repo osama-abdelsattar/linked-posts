@@ -12,8 +12,8 @@ export default function Error() {
   return (
     <>
       <Header />
-      <main className="mt-20 font-[inter] min-h-[calc(100vh-(20*0.25rem))] bg-sky-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 flex flex-col justify-center items-center">
-        <div className="bg-sky-50 dark:bg-slate-800 max-w-4xl mx-auto rounded-lg flex flex-col gap-12 items-center px-12 py-8 animate-appearance-in">
+      <main className="font-[inter] min-h-[calc(100vh-(20*0.25rem))] bg-sky-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 flex flex-col justify-center items-center">
+        <div className="bg-sky-50 dark:bg-slate-800 w-full sm:w-fit max-w-4xl mx-auto sm:rounded-2xl flex flex-col gap-12 items-center px-12 py-8 animate-appearance-in">
           <div className="w-full h-2 rounded-lg bg-linear-to-r from-sky-500 to-teal-500 dark:from-sky-600 dark:to-teal-600" />
           <div className="max-w-xl text-center">
             <div className="text-8xl font-black bg-linear-to-br from-sky-400 to-teal-400 dark:from-sky-500/80 dark:to-teal-500/80 bg-clip-text text-transparent tracking-tighter mb-2 animate-pulse">

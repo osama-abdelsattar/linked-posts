@@ -11,7 +11,8 @@ import AddComment from "./AddComment";
 export default function PostCard({ post, className, refetch }) {
   return (
     <Card
-      className={`dark:bg-slate-700/60 transition-colors mb-8 ${className || ""}`}
+      shadow="sm"
+      className={`dark:bg-slate-700/60 transition-colors rounded-none sm:rounded-xl mb-2 sm:mb-4 md:mb-8 ${className || ""}`}
     >
       <CardHeader className="flex gap-3 p-4 ">
         <PostHeader post={post} refetch={refetch} />
@@ -20,7 +21,7 @@ export default function PostCard({ post, className, refetch }) {
       <CardBody className="p-0">
         <PostBody
           post={post}
-          imageClassName="max-h-[40rem] object-cover"
+          imageClassName="max-h-[22.5rem] md:max-h-[35rem] xl:max-h-[40rem] object-cover"
           bodyClassName="transition-colors hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
           bodyNavigateTo={`/post/${post._id}`}
         />
@@ -30,7 +31,7 @@ export default function PostCard({ post, className, refetch }) {
         <div className="flex items-center">
           <PostActions hover />
         </div>
-        <p className="text-slate-400 cursor-pointer hover:bg-black/7.5 dark:hover:bg-white/5 transition-colors px-7 py-4 ">
+        <p className="text-slate-400 cursor-pointer hover:bg-black/7.5 dark:hover:bg-white/5 transition-colors p-3 text-sm md:text-base md:p-4">
           {post.commentsCount} Comments
         </p>
       </CardFooter>

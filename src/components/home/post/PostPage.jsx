@@ -96,9 +96,9 @@ export default function PostPage() {
   ) : postLoading ? (
     <SkeletonPost />
   ) : (
-    <div className="min-h-[calc(100vh-11rem)] flex items-center">
+    <div className="sm:min-h-[calc(100vh-8rem)] flex items-center">
       {(isPostFetching || isCommentsFetching) && <ReloadSpinner />}
-      <Card className="dark:bg-slate-700/60 transition-colors grow">
+      <Card className="dark:bg-slate-700/60 transition-colors rounded-none sm:rounded-xl grow">
         <CardHeader className="flex gap-3 px-6 py-4">
           <PostHeader post={postData.data.data.post} refetch={postRefetch} />
         </CardHeader>
@@ -116,7 +116,7 @@ export default function PostPage() {
             <PostActions hover />
           </div>
           {commentsData?.data.data.comments ? (
-            <p className="text-slate-400 cursor-pointer hover:bg-black/7.5 dark:hover:bg-white/5 transition-colors px-7 py-4 flex items-center gap-1.5">
+            <p className="text-slate-400 cursor-pointer hover:bg-black/7.5 dark:hover:bg-white/5 transition-colors p-3 text-sm md:text-base md:p-4">
               {commentsData.data.data.comments.length} Comments
             </p>
           ) : (

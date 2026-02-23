@@ -142,7 +142,10 @@ export default function CommentCard({ comment, postId, refetch }) {
             </span>
             <span className="text-sm">{comment.content}</span>
           </div>
-          <Dropdown classNames={{ content: "bg-sky-100 dark:bg-slate-700" }}>
+          <Dropdown
+            placement="bottom-end"
+            classNames={{ content: "bg-sky-50 dark:bg-slate-700" }}
+          >
             <DropdownTrigger>
               <div className="text-xl py-2 px-1 bg-transparent dark:hover:bg-white/5 transition-background cursor-pointer rounded-md">
                 <BsThreeDotsVertical />
@@ -150,7 +153,7 @@ export default function CommentCard({ comment, postId, refetch }) {
             </DropdownTrigger>
             <DropdownMenu aria-label="Post Actions">
               {comment.commentCreator._id === userData.data.data.user._id ? (
-                <>
+                [
                   <DropdownItem
                     key="Edit Post"
                     classNames={{
@@ -161,7 +164,7 @@ export default function CommentCard({ comment, postId, refetch }) {
                     onPress={onUpdateModalOpen}
                   >
                     Edit
-                  </DropdownItem>
+                  </DropdownItem>,
                   <DropdownItem
                     key="Delete Post"
                     startContent={<FaTrash />}
@@ -172,8 +175,8 @@ export default function CommentCard({ comment, postId, refetch }) {
                     onPress={onDeleteModalOpen}
                   >
                     Delete
-                  </DropdownItem>
-                </>
+                  </DropdownItem>,
+                ]
               ) : (
                 <DropdownItem
                   key={`Follow ${comment.commentCreator.name}`}

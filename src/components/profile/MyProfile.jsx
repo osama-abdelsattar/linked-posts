@@ -41,13 +41,13 @@ export default function MyProfile() {
   ) : (
     <>
       {userPostsFetching && <ReloadSpinner />}
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2 sm:gap-6">
         <ProfileContent
           data={userData}
           posts={userPosts}
           isPostsLoading={userPostsLoading}
         />
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center py-3 px-4 sm:p-0">
           <div className="flex-col p-0">
             <h2 className="text-xl font-semibold">Posts</h2>
             <p className="text-slate-400">See, edit, or delete your posts.</p>
