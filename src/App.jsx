@@ -1,5 +1,5 @@
 // React
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 // Context
 import UserData from "./context/UserData";
@@ -103,10 +103,22 @@ const routes = createBrowserRouter([
 ]);
 
 export default function App() {
+  const [placement, setPlacement] = useState(
+    window.innerWidth < 768 ? "bottom-center" : "top-center",
+  );
+
   useEffect(() => {
     document.documentElement.classList =
       localStorage.getItem("theme") || "light";
+
+    const handleResize = () => {
+      setPlacement(window.innerWidth < 640 ? "bottom" : "top-center");
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
   return (
     <>
       <HeroUIProvider>
@@ -117,10 +129,10 @@ export default function App() {
         </Authentication>
       </HeroUIProvider>
       <ToastProvider
-        placement="top-center"
+        placement={placement}
         toastOffset={8}
         toastProps={{
-          className: "w-full! max-w-xl",
+          className: "w-full! sm:max-w-xl",
           classNames: { icon: "size-5" },
           timeout: 1000 * 3,
         }}

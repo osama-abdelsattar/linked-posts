@@ -71,17 +71,17 @@ export default function Login() {
   });
   return (
     <main className="bg-sky-50 dark:bg-slate-900 transition-colors">
-      <div className="grid grid-cols-1 lg:grid-cols-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
         <LoginHero />
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          className="p-8 flex flex-col gap-y-8 justify-center min-h-screen"
+          className="lg:p-8 flex flex-col gap-y-8 justify-center lg:min-h-screen"
           children={[
             <div
               key="loginPage"
-              className="bg-white dark:bg-slate-800 p-8 rounded-2xl w-full transition-colors"
+              className="bg-white dark:bg-slate-800 p-8 lg:rounded-2xl w-full transition-colors"
             >
               <div className="flex justify-between items-center">
                 <h1 className="text-4xl font-bold text-sky-900 dark:text-slate-200 transition-colors">
@@ -98,13 +98,13 @@ export default function Login() {
                 </div>
               </div>
               <div className="mt-8 flex flex-col md:flex-row lg:flex-col items-center gap-4">
-                <button className="w-full flex gap-2 items-center justify-center px-4 py-2 cursor-pointer text-slate-600 dark:text-slate-400 bg-slate-100 hover:bg-slate-200 transition-colors dark:bg-slate-700 dark:border-slate-600 dark:hover:bg-slate-900/25 border border-slate-300 rounded-2xl">
+                <button className="w-full flex gap-2 items-center justify-center px-4 py-2 cursor-pointer text-slate-600 dark:text-slate-400 bg-slate-100 hover:bg-slate-200 transition-colors dark:bg-slate-700/60 dark:border-slate-600 dark:hover:bg-slate-700/30 border border-slate-300 rounded-2xl">
                   <FcGoogle className="text-xl" />
                   <span className="font-medium">
                     Log in with Google account
                   </span>
                 </button>
-                <button className="w-full flex gap-2 items-center justify-center px-4 py-2 cursor-pointer text-sky-600 dark:text-sky-600/80 bg-slate-100 hover:bg-slate-200 transition-colors dark:bg-slate-700 dark:border-slate-600 dark:hover:bg-slate-900/25 border border-slate-300 rounded-2xl">
+                <button className="w-full flex gap-2 items-center justify-center px-4 py-2 cursor-pointer text-sky-600 dark:text-sky-600/80 bg-slate-100 hover:bg-slate-200 transition-colors dark:bg-slate-700/60 dark:border-slate-600 dark:hover:bg-slate-700/30 border border-slate-300 rounded-2xl">
                   <FaFacebook className="text-lg" />
                   <span className="font-medium">
                     Log in with Facebook account
@@ -114,7 +114,7 @@ export default function Login() {
               <HorizontalDivider />
               <form
                 onSubmit={handleSubmit(logIn)}
-                className="mt-8 flex flex-col md:flex-row md:flex-wrap lg:flex-col lg:flex-nowrap gap-6"
+                className="mt-8 flex flex-col gap-6"
               >
                 <div className="grow">
                   <div className="field floating-label">
@@ -171,7 +171,7 @@ export default function Login() {
                   Log in
                 </Button>
               </form>
-            </div>
+            </div>,
           ]}
         />
       </div>

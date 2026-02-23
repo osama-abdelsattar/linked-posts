@@ -275,17 +275,17 @@ export default function Signup() {
   });
   return (
     <main className="bg-sky-50 dark:bg-slate-900 transition-colors">
-      <div className="grid grid-cols-1 lg:grid-cols-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
         <LoginHero />
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          className="p-8 flex flex-col gap-y-8 justify-center min-h-screen"
+          className="lg:p-8 flex flex-col gap-y-8 justify-center lg:min-h-screen"
           children={[
             <div
               key="signupPage"
-              className="bg-white dark:bg-slate-800 p-8 rounded-2xl w-full transition-colors"
+              className="bg-white dark:bg-slate-800 p-8 lg:rounded-2xl w-full transition-colors"
             >
               <div className="flex justify-between items-center">
                 <h1 className="text-4xl font-bold text-sky-900 dark:text-slate-200 transition-colors">
