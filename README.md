@@ -1,16 +1,22 @@
-# React + Vite
+# LinkedPosts
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+LinkedPosts is a sleek, modern, card-based social media feed platform designed to offer an immersive, distraction-free content viewing experience. Combining the clean aesthetics of LinkedIn and Facebook, the application emphasizes responsive layouts, fluid micro-interactions, and optimized server-state handling.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **User Authentication & Guarded Routes:** Full Login and Signup flows. Unauthenticated users are automatically restricted via a Guard component, while authenticated users are prevented from accessing auth pages.
+- **Interactive Feed:** Dynamic post builder supporting text input and image uploads (via FormData) with cached feed fetching and instant mutation updates.
+- **Commenting System:** Read post-specific comments, view the top comment directly on the feed card, and submit new comments instantly.
+- **Profile Management:** Customized user profiles supporting profile picture updates, post history, and public profile views (`/user/:userId`).
+- **Premium UI/UX:** Persistent Light/Dark mode toggle (stored in `localStorage`), custom grid-based slide-out navigation for mobile screens, and smooth transitions powered by Framer Motion.
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Core & Bundling:** React 19.2 + Vite
+- **Routing:** React Router DOM v7 (featuring lazy-loaded routes)
+- **Server State & Caching:** TanStack React Query v5
+- **Styling & Components:** Tailwind CSS v4, HeroUI v2 (React UI library), Vanilla CSS
+- **Animations:** Framer Motion
+- **Forms & Validation:** React Hook Form + Zod
+- **HTTP Client:** Axios
+- **Backend API:** Connects to an external REST API
